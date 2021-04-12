@@ -21,4 +21,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::middleware(['auth'])->group(function() {
+    Route::get('/generate-invoice', function() {
+        return view('invoice');
+    })->name('invoice');
+});
+
 require __DIR__.'/auth.php';
