@@ -25,6 +25,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/generate-invoice', function() {
         return view('invoice');
     })->name('invoice');
+
+    Route::get('/projects', function() {
+        return view('projects');
+    })->name('projects');
 });
 
 require __DIR__.'/auth.php';

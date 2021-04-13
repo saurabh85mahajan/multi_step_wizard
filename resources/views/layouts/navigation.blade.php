@@ -19,6 +19,10 @@
                     <x-nav-link :href="route('invoice')" :active="request()->routeIs('invoice')">
                         {{ __('Generate Invoice') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('projects')" :active="request()->routeIs('projects')">
+                        {{ __('Projects') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -73,6 +77,10 @@
 
             <x-responsive-nav-link :href="route('invoice')" :active="request()->routeIs('invoice')">
                 {{ __('Generate Invoice') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('projects')" :active="request()->routeIs('projects')">
+                {{ __('Projects') }}
             </x-responsive-nav-link>
         </div>
 
