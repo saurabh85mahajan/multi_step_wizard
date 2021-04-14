@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\SaveProject;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,9 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/projects', function() {
         return view('projects');
     })->name('projects');
+
+    Route::get('/projects/add', SaveProject::class)->name('projects.add');
+    Route::get('/projects/edit/{id}', SaveProject::class)->name('projects.edit');
 });
 
 require __DIR__.'/auth.php';
