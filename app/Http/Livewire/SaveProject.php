@@ -6,10 +6,12 @@ use Livewire\Component;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Support\Arr;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class SaveProject extends Component
 {
 
+    use AuthorizesRequests;
     public $project;
     public $tasks = [];
     public $isEdit = false;
@@ -30,6 +32,7 @@ class SaveProject extends Component
     {
         if( !is_null ($id)) {
             $this->project = Project::find($id);
+            $this->authorize('update', $this->project);
             $this->isEdit = true;
             $this->tasks = array_map(function ($t) {
                 return Arr::only($t, ['id', 'priority', 'title']);
