@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-4">
-            <form wire:submit.prevent="saveProject">
+            <form wire:submit.prevent="saveProjectAndTasks">
             
                 <div>
                     <x-label for="project_name" value="Project Name" class="mt-4" />
@@ -26,11 +26,11 @@
                          </div>
 
                         <div class="flex justify-between mt-4">
-
                             <div>
                                 <select wire:model.defer="tasks.{{$i}}.priority" class="form-select rounded-md shadow-sm">
                                     <option value="">-Select Priority-</option>
                                     <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
                                     <option value="high">High</option>
                                 </select>
                                 <x-wizard-validation-error for="tasks.{{$i}}.priority" class="mt-2" />
@@ -52,7 +52,7 @@
                 @endif
 
                 <div>
-                    <x-button class="bg-indigo-500 hover:bg-indigo-800 mt-4">Save</x-button>
+                    <x-button id="sub-btn" class="bg-indigo-500 hover:bg-indigo-800 mt-4">Save</x-button>
                 </div>
             </form>
         </div>

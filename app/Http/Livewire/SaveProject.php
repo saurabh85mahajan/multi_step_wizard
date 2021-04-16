@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Project;
+use App\Models\Task;
+use Illuminate\Support\Arr;
 
 class SaveProject extends Component
 {
@@ -29,6 +31,9 @@ class SaveProject extends Component
         if( !is_null ($id)) {
             $this->project = Project::find($id);
             $this->isEdit = true;
+            $this->tasks = array_map(function ($t) {
+                return Arr::only($t, ['id', 'priority', 'title']);
+            }, $this->project->tasks->toArray());
         } else {
             $this->project = new Project();
         }
@@ -40,12 +45,14 @@ class SaveProject extends Component
             return;
         }
         $this->tasks[] = ['title' => '', 'priority' => '', 'id' => ''];
-        $this->resetErrorBag();
     }
 
     public function deleteTask($i)
     {
         unset($this->tasks[$i]);
+        $this->resetValidation('tasks.'. $i . '.title');
+        $this->resetValidation('tasks.'. $i . '.priority');
+        $this->tasks = array_values($this->tasks);
     }
 
     public function canAddMoreTasks()
@@ -53,34 +60,33 @@ class SaveProject extends Component
         return count($this->tasks) < 5;
     }
 
-    public function saveProject()
+    public function saveProjectAndTasks()
     {
         $this->validate();
         auth()->user()->projects()->save($this->project);
 
-        // if ($this->isEdit) {
-        //     $allIds = $this->project->tasks->pluck('id')->all();
-        //     if (!empty($allIds)) {
-        //         $passedIds = Arr::pluck($this->tasks, 'id');
-        //         $toDelete = array_diff($allIds, $passedIds);
-        //         if (!empty($toDelete)) {
-        //             Task::destroy($toDelete);
-        //         }
-        //     }
-        // }
+        if ($this->isEdit) {
+            $allIds = $this->project->tasks->pluck('id')->all();
+            if (!empty($allIds)) {
+                $passedIds = Arr::pluck($this->tasks, 'id');
+                $toDelete = array_diff($allIds, $passedIds);
+                if (!empty($toDelete)) {
+                    Task::destroy($toDelete);
+                }
+            }
+        }
 
-        // foreach ($this->tasks as $t) {
-        //     if (isset($t['id']) && $t['id'] > 0) {
-        //         $task = Task::find($t['id']);
-        //         $task->title = $t['title'];
-        //         $task->priority = $t['priority'];
-        //         $task->save();
-        //     } else {
-        //         $task = new Task(['title' => $t['title'], 'priority' => $t['priority']]);
-        //         $this->project->tasks()->save($task);
-        //     }
-        // }
-        // // $this->project->tasks()->saveMany($this->tasks);
+        foreach ($this->tasks as $t) {
+            if (isset($t['id']) && $t['id'] > 0) {
+                $task = Task::find($t['id']);
+                $task->title = $t['title'];
+                $task->priority = $t['priority'];
+                $task->save();
+            } else {
+                $task = new Task(['title' => $t['title'], 'priority' => $t['priority']]);
+                $this->project->tasks()->save($task);
+            }
+        }
         return redirect()->route('projects');
     }
 

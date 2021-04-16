@@ -18,6 +18,6 @@ class Project extends Model
 
     public function tasks()
     {
-        return $this->hasMany(\App\Models\Project::class);
+        return $this->hasMany(\App\Models\Task::class);
     }
 }
