@@ -33,6 +33,10 @@ Route::middleware(['auth'])->group(function() {
 
     Route::get('/projects/add', SaveProject::class)->name('projects.add');
     Route::get('/projects/edit/{id}', SaveProject::class)->name('projects.edit');
+
+    Route::get('/products', function() {
+        return view('products');
+    })->name('products');
 });
 
 require __DIR__.'/auth.php';
