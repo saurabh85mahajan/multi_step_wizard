@@ -20,6 +20,8 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
+            @livewire('offline')
+            
             @include('layouts.navigation')
 
             <!-- Page Heading -->
